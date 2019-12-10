@@ -1,0 +1,40 @@
+---
+title: "PCA 10"
+author: "Mallory LaRusso"
+date: "3/31/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r riverData}
+library(readr)
+library(dplyr)
+riverData <- read_csv("https://raw.githubusercontent.com/jbpost2/IntermediateR/master/datasets/river.csv")
+
+```
+
+To create the new size variable we'll use the ifelse command and dplyr functions.  Then we'll order the levels for plotting purposes.
+
+```{r riverDatasize}
+riverData <- riverData %>% 
+	mutate(Size = ifelse(Size_km2 < 15000, "Small", 
+											 ifelse(Size_km2 < 100000, "Medium", 
+											 			 ifelse(Size_km2 < 350000, "Sizeable", 
+			                 ifelse(Size_km2 < 700000, "Large", "Great")))))
+
+riverData$Size <- ordered(riverData$Size, levels = c("Small", "Medium", "Sizeable", "Large", "Great"))
+
+```
+
+Analysis of the Rc Variable
+
+The dplyr package will be used for data manipulation and basic numeric summaries.  The means for each level of Size are given below.  
+
+```{r means}
+riverData %>% group_by(Size) %>% summarise(mean(Rc, na.rm = TRUE))
+```
+

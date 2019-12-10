@@ -1,0 +1,50 @@
+---
+title: "Activity 10"
+author: "Mallory LaRusso"
+date: "4/2/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.height = 3)
+library(ggplot2)
+library(dplyr)
+```
+
+# Step 1. Create an R Markdown file and choose the output type to be pdf. The instruction for each step should be included as separate headers in this file.
+
+# Step 2. Add the title, author, and date to the file.
+
+# Step 3. Load the dplyr package and ggplot2 package. Do not show any messages when loading those packages. Show the first 10 rows in the diamonds data set. In the pdf, display both the R code and the output.
+
+
+```{r diamonds 10 rows, eval = TRUE}
+diamonds[1:10,]
+```
+
+# Step 4. Use inline R code to answer the number of rows and columns in the diamonds data set. Do not hard-code the values.
+
+There are `r nrow(diamonds)` rows and `r ncol(diamonds)` columns.
+
+\pagebreak
+
+# Step 5. Reproduce the following output.
+
+```{r table, eval = TRUE, echo = FALSE}
+table <- diamonds %>% group_by(color, cut) %>% summarise(mean_price = mean(price), mean_carat = mean(carat))
+table <- table %>% filter((color == "D" | color == "J") & (cut == "Ideal" | cut == "Fair"))
+print(table)
+
+```
+
+# Step 6. Reproduce the following output. Set the height of the figure to be 3.
+
+```{r boxplot, eval = TRUE, echo = FALSE}
+a <- diamonds %>% filter((color == "D" | color == "J") & (cut == "Ideal" | cut == "Fair"))
+
+b <- ggplot(a, aes(x=cut, y=price)) + 
+  facet_wrap(~ color, strip.position = "right", dir = "v")
+
+b + geom_boxplot() + geom_jitter(aes(color = cut), size = 0.3) + scale_color_manual(values = c("coral2", "cyan3")) 
+
+```
